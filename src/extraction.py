@@ -6,12 +6,11 @@ def open_pdf(filepath):
     results = []
 
 #Looks at each image on each page of the PDF, calculates the DPI, saves and then produces the results
-    for page in doc:
+    for page_number, page in enumerate(doc, start=1):
         images = page.get_image_info(xrefs=True)
         for image in images:
             dpi = calculate_dpi(image)
-            results.append(dpi)
-            print(dpi)
+            results.append({"page": page_number, "dpi": dpi})
 
     return results
 
@@ -25,4 +24,5 @@ def calculate_dpi(image_info):
     return dpi
 
 if __name__ == "__main__":
-    open_pdf("sample_pdfs/low_res_sample.pdf")
+    data = open_pdf("sample_pdfs/low_res_sample.pdf")
+    print(data)

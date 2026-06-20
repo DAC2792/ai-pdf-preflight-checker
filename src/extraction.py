@@ -1,3 +1,11 @@
+"""
+extraction.py
+
+Pulls raw, factual data out of a submitted PDF — image resolution, colour mode,
+bleed presence, font embedding status. Makes no pass/fail judgements; that
+decision-making lives in rules_engine.py.
+"""
+
 import fitz
 
 #Opens the supplied PDF

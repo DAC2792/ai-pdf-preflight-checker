@@ -1,3 +1,11 @@
+"""
+rules_engine.py
+
+Takes facts gathered by extraction.py and compares them against the
+thresholds defined in config/preflight_rules.yaml, producing a pass/fail
+verdict with supporting detail for each check.
+"""
+
 import yaml
 
 #Open and return "Rules" for pass/fail from the preflight_rules.yaml in config

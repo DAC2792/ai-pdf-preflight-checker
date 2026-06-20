@@ -1,3 +1,11 @@
+"""
+main.py
+
+Ties extraction.py and rules_engine.py together: opens a PDF, runs each
+extracted image through the relevant preflight check, and reports the
+pass/fail result for each one.
+"""
+
 from extraction import open_pdf
 from rules_engine import load_rules, check_resolution
 

@@ -1,0 +1,14 @@
+# preflight_rules.yaml
+# These are the print-ready thresholds your PDF checker will test against.
+
+resolution:
+    min_dpi: 300
+  
+color:
+    required_mode: CMYK
+
+bleed:
+    min_bleed_mm: 3
+
+fonts:
+    require_embedded: true

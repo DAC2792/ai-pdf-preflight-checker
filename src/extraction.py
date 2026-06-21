@@ -18,7 +18,7 @@ def open_pdf(filepath):
         images = page.get_image_info(xrefs=True)
         for image in images:
             dpi = calculate_dpi(image)
-            results.append({"page": page_number, "dpi": dpi})
+            results.append({"page": page_number, "dpi": dpi, "print_mode": image["cs-name"]})
 
     return results
 

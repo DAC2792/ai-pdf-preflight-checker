@@ -22,8 +22,16 @@ def check_resolution(dpi, page_number, rules):
     else:
         result = "fail"
     return {"check": "resolution", "page": page_number, "dpi": dpi, "result": result}
+
+def check_colour_mode(print_mode, page_number, rules):
+    required_mode = rules["color"]["required_mode"]
+    if required_mode in print_mode:
+        result = "pass"
+    else:
+        result = "fail"
+    return {"check": "colour_profile", "page": page_number, "print_mode": print_mode, "result": result}
     
 if __name__ == "__main__":
     rules = load_rules("config/preflight_rules.yaml")
-    result = check_resolution(50.8, 1, rules)
+    result = check_colour_mode("DeviceRGB", 1, rules)
     print(result)

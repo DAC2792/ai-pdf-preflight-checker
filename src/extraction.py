@@ -62,12 +62,3 @@ def check_font_embedding(page):
         font_results.append({"font_name": str(font_name), "base_font": base_font, "embedded": embedded})
 
     return font_results
-
-if __name__ == "__main__":
-    data = open_pdf("sample_pdfs/low_res_sample.pdf")
-    print(data)
-
-    pdf = pikepdf.open("sample_pdfs/low_res_sample.pdf")
-    page = pdf.pages[0]
-    font_data = check_font_embedding(page)
-    print(font_data)

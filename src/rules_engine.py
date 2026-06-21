@@ -55,12 +55,3 @@ def check_fonts(font_data, page_number, rules):
         result = "fail"
 
     return {"check": "fonts", "page": page_number, "font_data": font_data, "result": result}
-
-if __name__ == "__main__":
-    rules = load_rules("config/preflight_rules.yaml")
-    test_fonts = [
-        {"font_name": "/F1", "base_font": "/Helvetica", "embedded": False},
-        {"font_name": "/F2", "base_font": "/Helvetica-Bold", "embedded": False}
-    ]
-    result = check_fonts(test_fonts, 1, rules)
-    print(result)

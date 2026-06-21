@@ -15,11 +15,13 @@ def open_pdf(filepath):
 
 #Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
     for page_number, page in enumerate(doc, start=1):
+        bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
+        results.append({"page": page_number, "check_type": "bleed", "bleed_data": bleed_data})
+
         images = page.get_image_info(xrefs=True)
         for image in images:
             dpi = calculate_dpi(image)
-            results.append({"page": page_number, "dpi": dpi, "print_mode": image["cs-name"]})
-
+            results.append({"page": page_number, "check_type": "image", "dpi": dpi, "print_mode": image["cs-name"]})
     return results
 
 #Calculate the DPI of the supplied PDF page(s) images

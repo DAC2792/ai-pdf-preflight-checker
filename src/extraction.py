@@ -13,7 +13,7 @@ def open_pdf(filepath):
     doc = fitz.open(filepath)
     results = []
 
-#Looks at each image on each page of the PDF, calculates the DPI, saves and then produces the results
+#Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
     for page_number, page in enumerate(doc, start=1):
         images = page.get_image_info(xrefs=True)
         for image in images:

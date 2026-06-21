@@ -23,8 +23,9 @@ def check_resolution(dpi, page_number, rules):
         result = "fail"
     return {"check": "resolution", "page": page_number, "dpi": dpi, "result": result}
 
+#Check print-mode of the image and produce a pass/fail response against the image page number
 def check_colour_mode(print_mode, page_number, rules):
-    required_mode = rules["color"]["required_mode"]
+    required_mode = rules["colour"]["required_mode"]
     if required_mode in print_mode:
         result = "pass"
     else:

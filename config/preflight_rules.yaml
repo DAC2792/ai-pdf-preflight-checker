@@ -4,7 +4,7 @@
 resolution:
     min_dpi: 300
   
-color:
+colour:
     required_mode: CMYK
 
 bleed:

@@ -7,7 +7,7 @@ pass/fail result for each one.
 """
 
 from extraction import open_pdf
-from rules_engine import load_rules, check_resolution
+from rules_engine import load_rules, check_resolution, check_colour_mode
 
 if __name__ == "__main__":
 
@@ -15,9 +15,12 @@ if __name__ == "__main__":
     extraction_results = open_pdf("sample_pdfs/low_res_sample.pdf")
     rules = load_rules("config/preflight_rules.yaml")
 
-    #Loop through each image in the open_pdf extraction, and produce the dpi check results
+    #Loop through each image in the open_pdf extraction, and produce the check results
     for item in extraction_results:
         page_number = item["page"]
         dpi = item["dpi"]
-        result = check_resolution(dpi, page_number, rules)
-        print(result)
+        print_mode = item["print_mode"]
+        resolution_result = check_resolution(dpi, page_number, rules)
+        colour_result = check_colour_mode(print_mode, page_number, rules)
+        print(resolution_result)
+        print(colour_result)

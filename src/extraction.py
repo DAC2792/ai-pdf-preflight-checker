@@ -7,6 +7,7 @@ decision-making lives in rules_engine.py.
 """
 
 import fitz
+import pikepdf
 
 #Opens the supplied PDF
 def open_pdf(filepath):
@@ -45,11 +46,23 @@ def calculate_bleed(trimbox, bleedbox):
 
     return{"bleed_width_mm": bleed_width_mm, "bleed_height_mm": bleed_height_mm}
 
+#Acquire font specification data from the opened PDF
+def check_font_embedding(page):
+    fonts = page.Resources.get("/Font", {})
+    font_results = []
+
+    for font_name, font_data in fonts.items():
+        base_font = str(font_data["/BaseFont"])
+        embedded = "/FontFile" in font_data or "/FontFile2" in font_data or "/FontFile3" in font_data
+        font_results.append({"font_name": str(font_name), "base_font": base_font, "embedded": embedded})
+
+    return font_results
+
 if __name__ == "__main__":
     data = open_pdf("sample_pdfs/low_res_sample.pdf")
     print(data)
 
-    doc = fitz.open("sample_pdfs/low_res_sample.pdf")
-    page = doc[0]
-    bleed_result = calculate_bleed(page.trimbox, page.bleedbox)
-    print(bleed_result)
+    pdf = pikepdf.open("sample_pdfs/low_res_sample.pdf")
+    page = pdf.pages[0]
+    font_data = check_font_embedding(page)
+    print(font_data)

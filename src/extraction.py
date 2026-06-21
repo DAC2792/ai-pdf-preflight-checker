@@ -31,6 +31,23 @@ def calculate_dpi(image_info):
     dpi = pixel_width / placed_width_inches
     return dpi
 
+#Calculate the amount of bleed supplied using the trimbox/bleedboxes
+def calculate_bleed(trimbox, bleedbox):
+    trim_width = trimbox.x1 - trimbox.x0
+    trim_height = trimbox.y1 - trimbox.y0
+    bleed_width = bleedbox.x1 - bleedbox.x0
+    bleed_height = bleedbox.y1 - bleedbox.y0
+
+    bleed_width_mm = (bleed_width - trim_width) / 2.835
+    bleed_height_mm = (bleed_height - trim_height) / 2.835
+
+    return{"bleed_width_mm": bleed_width_mm, "bleed_height_mm": bleed_height_mm}
+
 if __name__ == "__main__":
     data = open_pdf("sample_pdfs/low_res_sample.pdf")
     print(data)
+
+    doc = fitz.open("sample_pdfs/low_res_sample.pdf")
+    page = doc[0]
+    bleed_result = calculate_bleed(page.trimbox, page.bleedbox)
+    print(bleed_result)

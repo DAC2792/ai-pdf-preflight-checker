@@ -12,12 +12,17 @@ import pikepdf
 #Opens the supplied PDF
 def open_pdf(filepath):
     doc = fitz.open(filepath)
+    pikepdf_doc = pikepdf.open(filepath)
     results = []
 
 #Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
     for page_number, page in enumerate(doc, start=1):
         bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
         results.append({"page": page_number, "check_type": "bleed", "bleed_data": bleed_data})
+        
+        pikepdf_page = pikepdf_doc.pages[page_number - 1]
+        font_data = check_font_embedding(pikepdf_page)
+        results.append({"page": page_number, "check_type": "fonts", "font_data": font_data})
 
         images = page.get_image_info(xrefs=True)
         for image in images:

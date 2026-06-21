@@ -43,7 +43,24 @@ def check_bleed(bleed_data, page_number, rules):
         result = "fail"
     return {"check": "bleed", "page": page_number, "bleed_width_mm": width, "bleed_height_mm": height, "result": result}
 
+#Calculate if the fonts present on each page are embedded or not
+def check_fonts(font_data, page_number, rules):
+    require_embedded = rules["fonts"]["require_embedded"]
+
+    all_embedded = all(font["embedded"] for font in font_data)
+
+    if all_embedded == require_embedded:
+        result = "pass"
+    else:
+        result = "fail"
+
+    return {"check": "fonts", "page": page_number, "font_data": font_data, "result": result}
+
 if __name__ == "__main__":
     rules = load_rules("config/preflight_rules.yaml")
-    result = check_bleed({"bleed_width_mm": 0.0, "bleed_height_mm": 0.0}, 1, rules)
+    test_fonts = [
+        {"font_name": "/F1", "base_font": "/Helvetica", "embedded": False},
+        {"font_name": "/F2", "base_font": "/Helvetica-Bold", "embedded": False}
+    ]
+    result = check_fonts(test_fonts, 1, rules)
     print(result)

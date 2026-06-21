@@ -7,7 +7,7 @@ pass/fail result for each one.
 """
 
 from extraction import open_pdf
-from rules_engine import load_rules, check_resolution, check_colour_mode, check_bleed
+from rules_engine import load_rules, check_resolution, check_colour_mode, check_bleed, check_fonts
 
 if __name__ == "__main__":
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     extraction_results = open_pdf("sample_pdfs/low_res_sample.pdf")
     rules = load_rules("config/preflight_rules.yaml")
 
-    #Loop through each image in the open_pdf extraction, and produce the check results
+    #Loop through each image in the open_pdf extraction/rules_engine, and produce the check results
     for item in extraction_results:
         if item["check_type"] == "image":
             page_number = item["page"]
@@ -30,3 +30,8 @@ if __name__ == "__main__":
             bleed_data = item["bleed_data"]
             bleed_result = check_bleed(bleed_data, page_number, rules)
             print(bleed_result)
+        elif item["check_type"] == "fonts":
+            page_number = item["page"]
+            font_data = item["font_data"]
+            fonts_result = check_fonts(font_data, page_number, rules)
+            print(fonts_result)

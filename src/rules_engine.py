@@ -31,8 +31,19 @@ def check_colour_mode(print_mode, page_number, rules):
     else:
         result = "fail"
     return {"check": "colour_profile", "page": page_number, "print_mode": print_mode, "result": result}
-    
+
+#Calculate if there is sufficient bleed across all image points against the minimum requirement in preflight_rules.yaml     
+def check_bleed(bleed_data, page_number, rules):
+    width = bleed_data["bleed_width_mm"]
+    height = bleed_data["bleed_height_mm"]
+    min_bleed = rules["bleed"]["min_bleed_mm"]
+    if width >= min_bleed and height >= min_bleed:
+        result = "pass"
+    else:
+        result = "fail"
+    return {"check": "bleed", "page": page_number, "bleed_width_mm": width, "bleed_height_mm": height, "result": result}
+
 if __name__ == "__main__":
     rules = load_rules("config/preflight_rules.yaml")
-    result = check_colour_mode("DeviceRGB", 1, rules)
+    result = check_bleed({"bleed_width_mm": 0.0, "bleed_height_mm": 0.0}, 1, rules)
     print(result)

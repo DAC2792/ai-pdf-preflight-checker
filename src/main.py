@@ -8,6 +8,7 @@ pass/fail result for each one.
 
 from extraction import open_pdf
 from rules_engine import load_rules, check_resolution, check_colour_mode, check_bleed, check_fonts
+from report_generator import generate_report
 
 if __name__ == "__main__":
 
@@ -48,3 +49,7 @@ if __name__ == "__main__":
         for item in pdf_results:
             if item["result"] == "fail":
                 print(f" - {item['check']} failed on page {item['page']}")
+
+    #create and print the final preflight report
+    report = generate_report(pdf_results, filepath)
+    print(report)

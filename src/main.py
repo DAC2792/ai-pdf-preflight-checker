@@ -12,7 +12,8 @@ from rules_engine import load_rules, check_resolution, check_colour_mode, check_
 if __name__ == "__main__":
 
     #Acquire results from open_pdf, and rules from the yaml file
-    extraction_results = open_pdf("sample_pdfs/low_res_sample.pdf")
+    filepath = input("Enter the filepath to your PDF: ")
+    extraction_results = open_pdf(filepath)
     rules = load_rules("config/preflight_rules.yaml")
 
     #Loop through each image in the open_pdf extraction/rules_engine, and produce the check results

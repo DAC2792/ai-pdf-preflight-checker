@@ -23,8 +23,9 @@ def generate_report(pdf_results, filepath):
         model = "claude-sonnet-4-6",
         max_tokens = 2048,
         messages = [
-            {"role": "user", "content": f"""You are a professional print production specialist.
+            {"role": "user", "content": f"""You are a professional print production specialist. You are acting for a software application named "PressLens" which is built to help support users in selecting print ready artwork.
             Below are the preflight check results for a PDF file. Which tell us if a file is print ready or not.
+            Begin the report with a PressLens header, and sign off as PressLens at the end.
             Write a clear, professional preflight report explaining:
             - Which checks passed and which failed
             - Why each failure matters for print production

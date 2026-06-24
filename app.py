@@ -44,10 +44,10 @@ def check():
 
     overall_pass = all(item["result"] == "pass" for item in pdf_results)
     report = generate_report(pdf_results, filepath)
-    save_report(report, filepath)
+    report_path = save_report(report, filepath)
 
     report_html = markdown.markdown(report)
-    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = file.filename)
+    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = file.filename, report_path = report_path)
 
 #results page supplies the finished report
 @app.route("/results")
@@ -56,6 +56,13 @@ def results():
     overall_pass = session.get("overall_pass", False)
     filename = session.get("filename", "")
     return render_template("results.html", report = report, overall_pass = overall_pass, filename = filename)
+
+#download function for the generated report
+@app.route("/download")
+def download():
+    from flask import send_file
+    report_path = request.args.get("path")
+    return send_file(report_path, as_attachment = True)
 
 if __name__ == "__main__":
     app.run(debug = True)

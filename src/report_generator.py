@@ -49,3 +49,4 @@ def save_report(report_text, filepath):
         f.write(report_text)
 
     print(f"Report saved to: {output_filename}")
+    return output_filename

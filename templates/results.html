@@ -122,6 +122,27 @@
             color: #e8ff00;
         }
 
+        .btn-download {
+            padding: 12px 24px;
+            background: #e8ff00;
+            border: 1px solid #e8ff00;
+            border-radius: 4px;
+            color: #0a0a0a;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background: #f0ff50;
+        }
+
         .report-container {
             background: #0d0d0d;
             border: 1px solid #1a1a1a;
@@ -252,8 +273,11 @@
                 <h2>{{ '✓ PASS' if overall_pass else '✗ FAIL' }}</h2>
                 <p>File checked: <span>{{ filename }}</span></p>
             </div>
-            <a href="/" class="btn-recheck">Check Another File</a>
-        </div>
+            <div style="display: flex; gap: 12px;">
+                <a href="/" class="btn-recheck">Check Another File</a>
+                <a href="/download?path={{ report_path }}" class="btn-download">Download Report</a>
+            </div>
+        </div>    
 
         <div class="report-container">
             {{ report | safe }}

@@ -1,0 +1,40 @@
+# 🔍 PressLens Preflight Report
+
+**File:** partial_fail_sample.pdf
+**Date:** 14 July 2025
+**Overall Status:** ❌ NOT PRINT READY — 3 issues require attention
+
+---
+
+## ✅ What Passed
+
+**Image Resolution** — Your image quality is good (305 DPI), meaning photos and graphics will print sharp and clear.
+
+---
+
+## ❌ Issues That Need Fixing
+
+### 1. Missing Bleed
+**What's wrong:** Your artwork has no bleed — the design stops exactly at the edge of the page. When printers trim thousands of sheets, tiny shifts can occur, leaving a thin white border along the edge of your finished product.
+
+**How to fix it:** Extend your background colours and images **3mm beyond each edge** of your design. Your designer or the software you used to create the file (e.g. InDesign, Illustrator) can add this.
+
+---
+
+### 2. Fonts Not Embedded
+**What's wrong:** The fonts used in your file (**Helvetica** and **Helvetica Bold**) are not saved inside the PDF. If our systems don't have those fonts installed, text may display incorrectly or be substituted with a different font entirely.
+
+**How to fix it:** When saving or exporting your PDF, make sure **"Embed Fonts"** is switched on. In most design applications this is found in the PDF export settings.
+
+---
+
+### 3. Incorrect Colour Profile
+**What's wrong:** Your file is set up using **RGB colour** (a screen-based colour mode). Commercial printers use **CMYK** inks, and converting automatically can cause colours to look duller or shift unexpectedly in print.
+
+**How to fix it:** Convert your artwork to **CMYK colour mode** before exporting your final PDF. Your designer can do this in applications like Adobe Illustrator, InDesign, or Photoshop.
+
+---
+
+*Once all three issues are resolved, please resubmit your file for a fresh preflight check.*
+
+**— PressLens**

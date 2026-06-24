@@ -1,0 +1,41 @@
+# 🔍 PressLens Preflight Report
+
+**File:** clean_pass_sample.pdf
+**Pages Checked:** 1
+**Overall Status:** ❌ FAIL — 2 issue(s) found
+
+---
+
+## ✅ Checks Passed
+
+| Check | Detail |
+|---|---|
+| Bleed | 6mm bleed detected — good to go |
+| Image Resolution | ~305 DPI — sharp and print-ready |
+
+---
+
+## ❌ Issues That Need Fixing
+
+### 1. Fonts Are Not Embedded
+**What's the problem?**
+Your file uses two fonts (*Helvetica* and *Helvetica Bold*), but they haven't been locked into the PDF. This means if our print systems don't have those exact fonts installed, your text could reflow, change appearance, or display incorrectly — and you'd never know until it's already printed.
+
+**What to do:**
+Re-export your file as a PDF and make sure the "Embed Fonts" option is turned on. In most design applications (InDesign, Illustrator, etc.) this is found in the PDF export settings. If you're unsure, choose the **PDF/X-1a** or **PDF/X-4** preset, which embeds fonts automatically.
+
+---
+
+### 2. Colour Mode Is Not Set Up for Print
+**What's the problem?**
+Your file is using **RGB colour** — a colour mode designed for screens. Commercial printing uses **CMYK**, and converting RGB at the press stage can cause colours to shift unexpectedly, meaning what looked great on your screen may not match the final printed result.
+
+**What to do:**
+Open your file in your design application and convert all colours to **CMYK**. When exporting, ensure the colour space is set to CMYK. Speak to your designer if you're unsure — getting this right before print avoids costly surprises.
+
+---
+
+*Please resubmit your file once both issues above have been resolved.*
+
+**— PressLens**
+*Helping you get print-ready, every time.*

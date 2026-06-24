@@ -1,14 +1,18 @@
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
 from flask import Flask, render_template, request, session, redirect, url_for
 from extraction import open_pdf
 from report_generator import generate_report, save_report
 from rules_engine import check_resolution, check_colour_mode, check_bleed, check_fonts, load_rules
-import os
 from dotenv import load_dotenv
+import markdown
 
 #load environment variables (.env read, create Flask app, assign secret key encryption)
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", os.urandom(24))
 
 #route to the HTML home page
 @app.route("/")
@@ -42,12 +46,8 @@ def check():
     report = generate_report(pdf_results, filepath)
     save_report(report, filepath)
 
-    session["pdf_results"] = pdf_results
-    session["report"] = report
-    session["overall_pass"] = overall_pass
-    session["filename"] = file.filename
-
-    return redirect(url_for("results"))
+    report_html = markdown.markdown(report)
+    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = file.filename)
 
 #results page supplies the finished report
 @app.route("/results")

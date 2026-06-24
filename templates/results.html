@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PressLens — Preflight Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 24px 48px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-wrap img { height: 52px; width: auto; }
+        .brand-text { display: flex; flex-direction: column; }
+
+        .brand-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #f0f0f0;
+        }
+
+        .brand-name span { color: #e8ff00; }
+
+        .brand-tagline {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        main {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .verdict {
+            border-radius: 4px;
+            padding: 28px 32px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .verdict.pass {
+            background: #001a00;
+            border: 1px solid #00ff88;
+        }
+
+        .verdict.fail {
+            background: #1a0000;
+            border: 1px solid #ff003c;
+        }
+
+        .verdict-left h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .verdict.pass .verdict-left h2 { color: #00ff88; }
+        .verdict.fail .verdict-left h2 { color: #ff003c; }
+
+        .verdict-left p {
+            font-size: 14px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .verdict-left p span {
+            color: #e8ff00;
+            font-weight: 500;
+        }
+
+        .btn-recheck {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #f0f0f0;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-recheck:hover {
+            border-color: #e8ff00;
+            color: #e8ff00;
+        }
+
+        .report-container {
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 40px;
+            line-height: 1.7;
+        }
+
+        .report-container h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #e8ff00;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .report-container h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #f0f0f0;
+            letter-spacing: 1px;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .report-container h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #e8ff00;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        .report-container p {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .report-container strong { color: #f0f0f0; font-weight: 500; }
+
+        .report-container ul, .report-container ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .report-container li {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .report-container hr {
+            border: none;
+            border-top: 1px solid #1a1a1a;
+            margin: 24px 0;
+        }
+
+        .report-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .report-container th {
+            background: #111;
+            color: #e8ff00;
+            padding: 10px 14px;
+            text-align: left;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .report-container td {
+            padding: 10px 14px;
+            border: 1px solid #1a1a1a;
+            color: #aaa;
+        }
+
+        .report-container tr:hover td { background: #111; }
+
+        em { color: #666; font-size: 13px; }
+
+        footer {
+            padding: 24px 48px;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #777;
+            font-style: italic;
+        }
+
+        .cmyk-dots { display: flex; gap: 6px; }
+        .cmyk-dots span { width: 8px; height: 8px; border-radius: 50%; display: block; }
+        .dot-c { background: #00b4d8; }
+        .dot-m { background: #ff006e; }
+        .dot-y { background: #e8ff00; }
+        .dot-k { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='PressLens_logo.png') }}" alt="PressLens Logo">
+            <div class="brand-text">
+                <div class="brand-name">Press<span>Lens</span></div>
+                <div class="brand-tagline">See it. Check it. Print it.</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="verdict {{ 'pass' if overall_pass else 'fail' }}">
+            <div class="verdict-left">
+                <h2>{{ '✓ PASS' if overall_pass else '✗ FAIL' }}</h2>
+                <p>File checked: <span>{{ filename }}</span></p>
+            </div>
+            <a href="/" class="btn-recheck">Check Another File</a>
+        </div>
+
+        <div class="report-container">
+            {{ report | safe }}
+        </div>
+    </main>
+
+    <footer>
+        <span class="footer-text">Helping get your artwork over the finish line</span>
+        <div class="cmyk-dots">
+            <span class="dot-c"></span>
+            <span class="dot-m"></span>
+            <span class="dot-y"></span>
+            <span class="dot-k"></span>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -9,6 +9,14 @@ from rules_engine import check_resolution, check_colour_mode, check_bleed, check
 from dotenv import load_dotenv
 import markdown
 from werkzeug.utils import secure_filename
+import bleach
+
+#assign specific tags to work alongside bleach to prevent XSS (cross-site scripting). blocking users from injecting malicous scripts
+ALLOWED_TAGS = [
+    "h1", "h2", "h3", "p", "ul", "ol", "li",
+    "strong", "em", "code", "pre", "hr",
+    "table", "thead", "tbody", "tr", "th", "td"
+    ]
 
 #load environment variables (.env read, create Flask app, assign secret key encryption)
 load_dotenv()
@@ -52,7 +60,7 @@ def check():
     report = generate_report(pdf_results, filepath)
     report_path = save_report(report, filepath)
 
-    report_html = markdown.markdown(report)
+    report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
     session["report_path"] = report_path
     return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
 

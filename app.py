@@ -21,7 +21,10 @@ ALLOWED_TAGS = [
 #load environment variables (.env read, create Flask app, assign secret key encryption)
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", os.urandom(24))
+secret_key = os.getenv("FLASK_SECRET_KEY")
+if not secret_key:
+    raise RuntimeError("FLASK_SECRET_KEY is not set. Add it to your .env file.")
+app.secret_key = secret_key
 
 #route to the HTML home page
 @app.route("/")

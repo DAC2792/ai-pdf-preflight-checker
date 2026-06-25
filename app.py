@@ -53,7 +53,8 @@ def check():
     report_path = save_report(report, filepath)
 
     report_html = markdown.markdown(report)
-    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename, report_path = report_path)
+    session["report_path"] = report_path
+    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
 
 #results page supplies the finished report
 @app.route("/results")
@@ -67,7 +68,9 @@ def results():
 @app.route("/download")
 def download():
     from flask import send_file
-    report_path = request.args.get("path")
+    report_path = session.get("report_path")
+    if not report_path:
+        abort(403, "No report available.")
     return send_file(report_path, as_attachment = True)
 
 if __name__ == "__main__":

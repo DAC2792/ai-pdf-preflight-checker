@@ -2,12 +2,13 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
 from extraction import open_pdf
 from report_generator import generate_report, save_report
 from rules_engine import check_resolution, check_colour_mode, check_bleed, check_fonts, load_rules
 from dotenv import load_dotenv
 import markdown
+from werkzeug.utils import secure_filename
 
 #load environment variables (.env read, create Flask app, assign secret key encryption)
 load_dotenv()
@@ -19,11 +20,16 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", os.urandom(24))
 def home():
     return render_template("index.html")
 
-#create report and route the user to the results page
+#create report and route the user to the results page. Security restrictions included to prevent malicous filenames from overwriting outside of intended parameters
 @app.route("/check", methods=["POST"])
 def check():
-    file = request.files["pdf_file"]
-    filepath = os.path.join("sample_pdfs", file.filename)
+    file = request.files.get("pdf_file")
+    if not file or file.filename == "":
+        abort(400, "No file provided.")
+    filename = secure_filename(file.filename)
+    if not filename:
+        abort(400, "Invalid filename.")
+    filepath = os.path.join("sample_pdfs", filename)
     file.save(filepath)
 
     extraction_results = open_pdf(filepath)
@@ -47,7 +53,7 @@ def check():
     report_path = save_report(report, filepath)
 
     report_html = markdown.markdown(report)
-    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = file.filename, report_path = report_path)
+    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename, report_path = report_path)
 
 #results page supplies the finished report
 @app.route("/results")

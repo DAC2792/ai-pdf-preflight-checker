@@ -9,26 +9,25 @@ decision-making lives in rules_engine.py.
 import fitz
 import pikepdf
 
-#Opens the supplied PDF
+#Opens the supplied PDF using the "with" statement to close the files once the funcion has completed.
 def open_pdf(filepath):
-    doc = fitz.open(filepath)
-    pikepdf_doc = pikepdf.open(filepath)
-    results = []
+    with fitz.open(filepath) as doc, pikepdf.open(filepath) as pikepdf_doc:
+        results = []
 
-#Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
-    for page_number, page in enumerate(doc, start=1):
-        bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
-        results.append({"page": page_number, "check_type": "bleed", "bleed_data": bleed_data})
+        #Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
+        for page_number, page in enumerate(doc, start = 1):
+            bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
+            results.append({"page": page_number, "check_type": "bleed", "bleed_data": bleed_data})
         
-        pikepdf_page = pikepdf_doc.pages[page_number - 1]
-        font_data = check_font_embedding(pikepdf_page)
-        results.append({"page": page_number, "check_type": "fonts", "font_data": font_data})
+            pikepdf_page = pikepdf_doc.pages[page_number - 1]
+            font_data = check_font_embedding(pikepdf_page)
+            results.append({"page": page_number, "check_type": "fonts", "font_data": font_data})
 
-        images = page.get_image_info(xrefs=True)
-        for image in images:
-            dpi = calculate_dpi(image)
-            results.append({"page": page_number, "check_type": "image", "dpi": dpi, "print_mode": image["cs-name"]})
-    return results
+            images = page.get_image_info(xrefs=True)
+            for image in images:
+                dpi = calculate_dpi(image)
+                results.append({"page": page_number, "check_type": "image", "dpi": dpi, "print_mode": image["cs-name"]})
+        return results
 
 #Calculate the DPI of the supplied PDF page(s) images
 def calculate_dpi(image_info):

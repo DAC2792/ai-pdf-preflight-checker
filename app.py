@@ -50,7 +50,7 @@ def check():
     filepath = os.path.join("sample_pdfs", filename)
     file.save(filepath)
 
-    #try/finally runs the logic, and finally deletes the results from the outputs folder
+    #try/finally runs the logic, and finally deletes the uploaded PDF from sample_pdfs/
     try:
         extraction_results = open_pdf(filepath)
         rules = load_rules("config/preflight_rules.yaml")
@@ -89,4 +89,4 @@ def download():
     return send_file(report_path, as_attachment = True)
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = os.getenv("FLASK_DEBUG", "false").lower() == "true")

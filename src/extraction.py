@@ -57,7 +57,12 @@ def check_font_embedding(page):
 
     for font_name, font_data in fonts.items():
         base_font = str(font_data["/BaseFont"])
-        embedded = "/FontFile" in font_data or "/FontFile2" in font_data or "/FontFile3" in font_data
+        descriptor = font_data.get("/FontDescriptor", {})
+        embedded = (
+            "/FontFile" in descriptor
+            or "/FontFile2" in descriptor
+            or "/FontFile3" in descriptor
+        )
         font_results.append({"font_name": str(font_name), "base_font": base_font, "embedded": embedded})
 
     return font_results

@@ -22,7 +22,7 @@ client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 def generate_report(pdf_results, filepath):
     message = client.messages.create(
         model = "claude-sonnet-4-6",
-        max_tokens = 1024,
+        max_tokens = 2048,
         messages = [
             {"role": "user", "content": f"""You are a professional print production specialist. You are acting for a software application named "PressLens" which is built to help support users in selecting print ready artwork.
             Below are the preflight check results for a PDF file. Which tell us if a file is print ready or not.

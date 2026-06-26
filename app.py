@@ -50,29 +50,34 @@ def check():
     filepath = os.path.join("sample_pdfs", filename)
     file.save(filepath)
 
-    extraction_results = open_pdf(filepath)
-    rules = load_rules("config/preflight_rules.yaml")
+    #try/finally runs the logic, and finally deletes the results from the outputs folder
+    try:
+        extraction_results = open_pdf(filepath)
+        rules = load_rules("config/preflight_rules.yaml")
 
-    pdf_results = []
-    for item in extraction_results:
-        if item["check_type"] == "image":
-            page_number = item["page"]
-            dpi = item["dpi"]
-            print_mode = item["print_mode"]
-            pdf_results.append(check_resolution(dpi, page_number, rules))
-            pdf_results.append(check_colour_mode(print_mode, page_number, rules))
-        elif item["check_type"] == "bleed":
-            pdf_results.append(check_bleed(item["bleed_data"], item["page"], rules))
-        elif item["check_type"] == "fonts":
-            pdf_results.append(check_fonts(item["font_data"], item["page"], rules))
+        pdf_results = []
+        for item in extraction_results:
+            if item["check_type"] == "image":
+                page_number = item["page"]
+                dpi = item["dpi"]
+                print_mode = item["print_mode"]
+                pdf_results.append(check_resolution(dpi, page_number, rules))
+                pdf_results.append(check_colour_mode(print_mode, page_number, rules))
+            elif item["check_type"] == "bleed":
+                pdf_results.append(check_bleed(item["bleed_data"], item["page"], rules))
+            elif item["check_type"] == "fonts":
+                pdf_results.append(check_fonts(item["font_data"], item["page"], rules))
 
-    overall_pass = all(item["result"] == "pass" for item in pdf_results)
-    report = generate_report(pdf_results, filepath)
-    report_path = save_report(report, filepath)
+        overall_pass = all(item["result"] == "pass" for item in pdf_results)
+        report = generate_report(pdf_results, filepath)
+        report_path = save_report(report, filepath)
 
-    report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
-    session["report_path"] = report_path
-    return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
+        report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
+        session["report_path"] = report_path
+        return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
+    finally:
+        if os.path.exists(filepath):
+            os.remove(filepath)
 
 #download function for the generated report
 @app.route("/download")

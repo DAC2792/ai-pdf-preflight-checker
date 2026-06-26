@@ -45,6 +45,8 @@ def save_report(report_text, filepath):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_filename = f"outputs/PressLens_report_{pdf_name}_{timestamp}.txt"
 
+    #ensures outputs folder exists before running. if not, it is created
+    os.makedirs("outputs", exist_ok = True)
     with open(output_filename, "w", encoding = "utf-8") as f:
         f.write(report_text)
 

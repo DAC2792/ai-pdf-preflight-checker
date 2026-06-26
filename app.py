@@ -11,12 +11,17 @@ import markdown
 from werkzeug.utils import secure_filename
 import bleach
 
-#assign specific tags to work alongside bleach to prevent XSS (cross-site scripting). blocking users from injecting malicous scripts
+#assign specific tags/extensions to work alongside bleach to prevent XSS (cross-site scripting). blocking users from injecting malicous scripts
 ALLOWED_TAGS = [
     "h1", "h2", "h3", "p", "ul", "ol", "li",
     "strong", "em", "code", "pre", "hr",
     "table", "thead", "tbody", "tr", "th", "td"
     ]
+
+ALLOWED_EXTENSIONS = {"pdf"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #load environment variables (.env read, create Flask app, assign secret key encryption)
 load_dotenv()
@@ -40,6 +45,8 @@ def check():
     filename = secure_filename(file.filename)
     if not filename:
         abort(400, "Invalid filename.")
+    if not allowed_file(filename):
+        abort(400, "Only PDF files are accepted.")
     filepath = os.path.join("sample_pdfs", filename)
     file.save(filepath)
 

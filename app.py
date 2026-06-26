@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import Flask, render_template, request, session, abort
 from extraction import open_pdf
 from report_generator import generate_report, save_report
 from rules_engine import check_resolution, check_colour_mode, check_bleed, check_fonts, load_rules
@@ -73,14 +73,6 @@ def check():
     report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
     session["report_path"] = report_path
     return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
-
-#results page supplies the finished report
-@app.route("/results")
-def results():
-    report = session.get("report", "")
-    overall_pass = session.get("overall_pass", False)
-    filename = session.get("filename", "")
-    return render_template("results.html", report = report, overall_pass = overall_pass, filename = filename)
 
 #download function for the generated report
 @app.route("/download")

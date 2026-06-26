@@ -16,9 +16,12 @@ def open_pdf(filepath):
 
         #Looks at each image on each page of the PDF and captures the image composition specs to compare against the preflight_rules.yaml file 
         for page_number, page in enumerate(doc, start = 1):
-            bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
+            if page.trimbox and page.bleedbox and page.trimbox != page.bleedbox:
+                bleed_data = calculate_bleed(page.trimbox, page.bleedbox)
+            else:
+                bleed_data = {"bleed_width_mm": 0, "bleed_height_mm": 0, "no_bleedbox": True}
             results.append({"page": page_number, "check_type": "bleed", "bleed_data": bleed_data})
-        
+
             pikepdf_page = pikepdf_doc.pages[page_number - 1]
             font_data = check_font_embedding(pikepdf_page)
             results.append({"page": page_number, "check_type": "fonts", "font_data": font_data})

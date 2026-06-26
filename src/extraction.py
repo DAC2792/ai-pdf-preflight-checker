@@ -34,9 +34,13 @@ def calculate_dpi(image_info):
     pixel_width = image_info["width"]
     bbox = image_info["bbox"]
     placed_width_points = bbox[2] - bbox[0]
+
+    if placed_width_points <= 0:
+        return 0
+    
     placed_width_inches = placed_width_points / 72
-    dpi = pixel_width / placed_width_inches
-    return dpi
+    return pixel_width / placed_width_inches
+        
 
 #Calculate the amount of bleed supplied using the trimbox/bleedboxes
 def calculate_bleed(trimbox, bleedbox):

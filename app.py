@@ -4,10 +4,7 @@ to which you can upload PDFs, generate and download print readiness preflight re
 and run multiple checks on multiple files. All from the custom styled PressLens interface.
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-
 from flask import Flask, render_template, request, session, abort
 from extraction import open_pdf
 from report_generator import generate_report, save_report

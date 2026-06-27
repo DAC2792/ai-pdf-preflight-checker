@@ -49,7 +49,7 @@ def check_fonts(font_data, page_number, rules):
 
     all_embedded = all(font["embedded"] for font in font_data)
 
-    if all_embedded == require_embedded:
+    if not require_embedded or all_embedded:
         result = "pass"
     else:
         result = "fail"

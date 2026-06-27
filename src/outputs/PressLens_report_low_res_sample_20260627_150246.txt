@@ -1,0 +1,41 @@
+# 🔍 PressLens Preflight Report
+
+**File:** low_res_sample.pdf
+**Pages Checked:** 2
+**Overall Status:** ❌ NOT PRINT READY — 4 issues found
+
+---
+
+## Issues Found
+
+### 1. 🖼️ Low Image Resolution — Page 1
+**What's wrong:** Your image resolution is only 51 DPI. For crisp, professional print results, a minimum of 300 DPI is required. At this resolution, images will appear blurry and pixelated when printed.
+
+**Fix:** Replace any images in the file with high-resolution versions (300 DPI or above) and re-export the PDF.
+
+---
+
+### 2. 📐 No Bleed Area — Pages 1 & 2
+**What's wrong:** Your file has no bleed (0mm on all sides). Bleed is a small border of extra artwork that extends beyond the trim edge. Without it, the final printed piece may show thin white edges after cutting.
+
+**Fix:** Extend your background colours and images by at least 3mm beyond the page edges, then re-export your PDF with bleed settings enabled.
+
+---
+
+### 3. 🔤 Fonts Not Embedded — Pages 1 & 2
+**What's wrong:** The fonts used (Helvetica and Helvetica Bold) are not embedded in the file. This means the printer's system may substitute a different font, causing your text to look wrong or reflow unexpectedly.
+
+**Fix:** Re-export your PDF with font embedding turned on. In most design applications, this is found under PDF export settings — look for an option to "embed all fonts."
+
+---
+
+### 4. 🎨 Wrong Colour Mode — Page 1
+**What's wrong:** Your file is set to RGB colour, which is designed for screens. Commercial printing uses CMYK. Colours may shift or look different when converted at print stage.
+
+**Fix:** Convert your document to CMYK colour mode in your design application before re-exporting the PDF.
+
+---
+
+*This file requires changes before it can go to print. Please action all four points above and resubmit for a fresh preflight check.*
+
+**— PressLens**

@@ -80,11 +80,13 @@ def check():
         report_path = save_report(report, filepath)
 
         report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
-        session["report_path"] = report_path
+        session["report_path"] = str(report_path)
         return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
     finally:
-        if filepath.exists():
-            filepath.unlink()
+        try:
+            filepath.unlink(missing_ok = True)
+        except PermissionError:
+            pass
 
 #download function for the generated report
 @app.route("/download")

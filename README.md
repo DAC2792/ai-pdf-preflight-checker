@@ -1,5 +1,7 @@
 # ai-pdf-preflight-checker
 
+![Run Tests](https://github.com/DAC2792/ai-pdf-preflight-checker/actions/workflows/tests.yml/badge.svg)
+
 An AI powered WebApp (PressLens) built to preflight PDFs and report back on their print readiness
 
 - Takes user input PDFs and produces a clear and informative preflight report

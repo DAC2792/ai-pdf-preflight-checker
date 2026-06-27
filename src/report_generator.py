@@ -10,10 +10,14 @@ production, and what the customer needs to fix.
 import anthropic
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 from datetime import datetime
 
 #load the .env file details into the program (keeps them private and secure)
 load_dotenv()
+
+#runs all pathing from the required parent folder or 'root'
+BASE_DIR = Path(__file__).parent
 
 #call into anthropic using the API key within the .env file. Error handling in place if the key is not found/recognised
 api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -47,10 +51,12 @@ def generate_report(pdf_results, filepath):
 def save_report(report_text, filepath):
     pdf_name = os.path.splitext(os.path.basename(filepath))[0]
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_filename = f"outputs/PressLens_report_{pdf_name}_{timestamp}.txt"
 
     #ensures outputs folder exists before running. if not, it is created
-    os.makedirs("outputs", exist_ok = True)
+    output_dir = BASE_DIR / "outputs"
+    output_dir.mkdir(exist_ok=True)
+    output_filename = output_dir / f"PressLens_report_{pdf_name}_{timestamp}.txt"
+
     with open(output_filename, "w", encoding = "utf-8") as f:
         f.write(report_text)
 

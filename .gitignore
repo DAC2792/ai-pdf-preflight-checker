@@ -5,3 +5,5 @@ outputs/*.txt
 __pycache__/
 *.pyc
 *.pyo
+outputs/
+sample_pdfs/

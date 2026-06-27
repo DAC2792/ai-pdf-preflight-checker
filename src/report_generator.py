@@ -15,8 +15,12 @@ from datetime import datetime
 #load the .env file details into the program (keeps them private and secure)
 load_dotenv()
 
-#call into anthropic using the API key within the .env file
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+#call into anthropic using the API key within the .env file. Error handling in place if the key is not found/recognised
+api_key = os.getenv("ANTHROPIC_API_KEY")
+if not api_key:
+    raise RuntimeError("ANTHROPIC_API_KEY is not set. Add it to your .env file.")
+
+client = anthropic.Anthropic(api_key = api_key)
 
 #generate a human-readable preflight report using the anthropic API
 def generate_report(pdf_results, filepath):

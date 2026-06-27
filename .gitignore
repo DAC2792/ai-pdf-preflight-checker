@@ -2,3 +2,6 @@ venv/
 .env
 outputs/*.txt
 *.egg-info/
+__pycache__/
+*.pyc
+*.pyo

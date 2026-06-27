@@ -5,11 +5,11 @@ An AI powered WebApp (PressLens) built to preflight PDFs and report back on thei
 - Takes user input PDFs and produces a clear and informative preflight report
 - Built to run using Anthropic, but can be modified to work with other models
 - Measures pass/fail results of the PDF using configurable industry standards (DPI, Colour mode, Bleed, and Font embedding)
-- Makes use of API calls to POST and GET the finalised reports
 - Custom designed brand WebApp interface (PressLens) available to run the program, as well as a separate main.py file to run within a command terminal
 - Downloadable txt reports available from the PressLens WebApp
 
 ## How to use the program
+
 1. Clone the repo using the following command/URL
 ```
 git clone https://github.com/DAC2792/ai-pdf-preflight-checker.git
@@ -18,76 +18,99 @@ git clone https://github.com/DAC2792/ai-pdf-preflight-checker.git
 ```
 python -m venv venv
 ```
-3. Install the necessary library extensions from the repo file. Command:
+3. Activate the virtual environment:
+Windows
+```
+venv\Scripts\activate
+```
+Mac/Linux
+```
+source venv/bin/activate
+```
+
+4. Install the necessary library extensions from the repo file. Command:
 ```
 pip install -r requirements.txt
 ```
-4. Connect your own API key to the program (store this in a .env file for security)
 ```
-ANTHROPIC_API_KEY=your-key-here
+pip install -e .
 ```
-5. Run the program using either main.py for the command terminal operation. or app.py for the PressLens WebApp
+
+5. Set up your environment variables by copying the example file:
 ```
-main.py
+cp .env.example .env
 ```
+Then open `.env` and fill in your values:
 ```
-app.py
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
+
+FLASK_SECRET_KEY=your-secret-key-here
+
+FLASK_DEBUG=false
 ```
-6. To access the PressLens WebApp, use your local domain:
+
+6. Run the program:
+
+**Option A — PressLens WebApp (recommended):**
+```
+python app.py
+```
+Then open your browser and go to:
 ```
 http://127.0.0.1:5000
 ```
+**Option B — Command terminal only:**
+```
+python src/main.py
+```
 
+## Running the tests
+```
+pytest -v
+```
 ## Roadmap
 
 **V1 (current):** PDF preflight checking with AI-generated reports via web interface and command terminal
 
 **V2 (planned):** Automatic fixing of detected issues — colour mode conversion, font embedding, bleed adjustment — without manual intervention
 
-## Example report output
-
-Included below is an example of a failed preflight report from a generated PDF file, in raw text format..
-
+## Example report output (downloadable version)
 ```
-# 🔍 PressLens Preflight Report
+# PressLens Preflight Report
 
-**File:** low_res\_sample.pdf
+**File:** low_res_sample.pdf
 **Pages Checked:** 2
-**Overall Status:** ❌ NOT PRINT READY — 4 issues found
+**Overall Status:** ❌ NOT PRINT READY
 
 ---
 
 ## Issues Found
 
-### ❌ 1. Missing Bleed — Pages 1 & 2
+### 1. 🔴 Low Image Resolution — Pages 1 & 2
+**What's wrong:** Your image quality is far too low for print. The file is set at approximately 51 DPI, but professional printing requires a minimum of 300 DPI. In simple terms — your images will look blurry and pixelated when printed.
 
-**What this means:** Bleed is a small border of extra artwork that extends beyond the edge of your design. Without it, you risk getting thin white edges on your finished printed product after it's been cut to size.
-
-**What to do:** Extend your background colours and images by at least **3mm beyond the edge** of your design on all sides, then re-export your PDF.
-
----
-
-### ❌ 2. Fonts Not Embedded — Pages 1 & 2
-
-**What this means:** The fonts used in your file (Helvetica and Helvetica-Bold) have not been saved *inside* the PDF. If our systems don't have those exact fonts installed, your text could change appearance or fail to print correctly.
-
-**What to do:** When exporting your PDF, ensure the **"Embed Fonts"** option is turned on. This is usually found in your export or save settings.
+**How to fix it:** Re-export or recreate your artwork using high-resolution images (300 DPI or higher). If you're working from a design application, check the export settings and ensure "high quality print" is selected.
 
 ---
 
-### ❌ 3. Image Resolution Too Low — Page 1
+### 2. 🔴 Fonts Not Embedded — Pages 1 & 2
+**What's wrong:** The fonts used in your file (Helvetica and Helvetica Bold) are not embedded. This means the printer's system may not have these fonts, which could cause text to display incorrectly or be substituted with a different font entirely.
 
-**What this means:** Your image is only **51 DPI**, which is very low quality. Print requires a minimum of **300 DPI**. At this resolution, your printed artwork will appear blurry and pixelated.
-
-**What to do:** Replace any images in your file with **high-resolution versions (300 DPI or above)** before re-exporting.
+**How to fix it:** Re-export your PDF and ensure the "Embed All Fonts" option is enabled. In most design tools this is found under PDF export or print settings.
 
 ---
 
-### ❌ 4. Wrong Colour Mode — Page 1
+### 3. 🔴 No Bleed Added — Pages 1 & 2
+**What's wrong:** Your file has zero bleed (0mm on all sides). Bleed is a small border of extra artwork that extends beyond the trim edge, preventing white edges from appearing if the page is cut even slightly off-centre.
 
-**What this means:** Your file is set up using **RGB colour**, which is designed for screens. Commercial printing uses **CMYK colour**. If left unchanged, your printed colours may look noticeably different from what you see on screen.
+**How to fix it:** Extend your background colours and images by at least **3mm** beyond the edge of your design on all sides, then re-export the PDF with bleed included.
 
-**What to do:** Convert your file's colour mode to **CMYK** before exporting. This can be done in most design applications under the document or colour settings.
+---
+
+### 4. 🔴 Wrong Colour Profile — Page 1
+**What's wrong:** Your file is using RGB colour mode, which is designed for screens. Professional printing uses CMYK. Colours may shift or look noticeably different once printed.
+
+**How to fix it:** Convert your document's colour mode to **CMYK** before exporting. This option is usually available in your design application under Document Settings or Colour Mode.
 
 ---
 
@@ -97,12 +120,12 @@ Included below is an example of a failed preflight report from a generated PDF f
 |---|---|---|
 | Bleed | ❌ Fail | ❌ Fail |
 | Fonts Embedded | ❌ Fail | ❌ Fail |
-| Image Resolution | ❌ Fail | — |
+| Resolution | ❌ Fail | — |
 | Colour Profile | ❌ Fail | — |
 
-Once all four issues have been fixed, please re-upload your file for a fresh preflight check.
+> ⚠️ **This file is not suitable for print in its current state.** Please address all four issues above and re-submit for a new preflight check.
 
 ---
 
-*Report generated by **PressLens** — helping you get print-perfect, every time.*
+*Report generated by **PressLens** — helping you get print-ready with confidence.*
 ```

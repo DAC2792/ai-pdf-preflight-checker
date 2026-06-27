@@ -17,7 +17,7 @@ from datetime import datetime
 load_dotenv()
 
 #runs all pathing from the required parent folder or 'root'
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent.parent
 
 #call into anthropic using the API key within the .env file. Error handling in place if the key is not found/recognised
 api_key = os.getenv("ANTHROPIC_API_KEY")

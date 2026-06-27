@@ -12,10 +12,14 @@ from flask import Flask, render_template, request, session, abort
 from extraction import open_pdf
 from report_generator import generate_report, save_report
 from rules_engine import check_resolution, check_colour_mode, check_bleed, check_fonts, load_rules
+from pathlib import Path
 from dotenv import load_dotenv
 import markdown
 from werkzeug.utils import secure_filename
 import bleach
+
+#runs all pathing from the required parent folder or 'root'
+BASE_DIR = Path(__file__).parent
 
 #assign specific tags/extensions to work alongside bleach to prevent XSS (cross-site scripting). blocking users from injecting malicous scripts
 ALLOWED_TAGS = [
@@ -53,13 +57,13 @@ def check():
         abort(400, "Invalid filename.")
     if not allowed_file(filename):
         abort(400, "Only PDF files are accepted.")
-    filepath = os.path.join("sample_pdfs", filename)
+    filepath = BASE_DIR / "sample_pdfs" / filename
     file.save(filepath)
 
     #try/finally runs the logic, and finally deletes the uploaded PDF from sample_pdfs/
     try:
         extraction_results = open_pdf(filepath)
-        rules = load_rules("config/preflight_rules.yaml")
+        rules = load_rules(BASE_DIR / "config" / "preflight_rules.yaml")
 
         pdf_results = []
         for item in extraction_results:
@@ -82,8 +86,8 @@ def check():
         session["report_path"] = report_path
         return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
     finally:
-        if os.path.exists(filepath):
-            os.remove(filepath)
+        if filepath.exists():
+            filepath.unlink()
 
 #download function for the generated report
 @app.route("/download")

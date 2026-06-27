@@ -5,7 +5,7 @@ and run multiple checks on multiple files. All from the custom styled PressLens 
 """
 
 import os
-from flask import Flask, render_template, request, session, abort
+from flask import Flask, render_template, request, session, abort, send_file
 from extraction import open_pdf
 from report_generator import generate_report, save_report
 from rules_engine import check_resolution, check_colour_mode, check_bleed, check_fonts, load_rules
@@ -91,7 +91,6 @@ def check():
 #download function for the generated report
 @app.route("/download")
 def download():
-    from flask import send_file
     report_path = session.get("report_path")
     if not report_path:
         abort(403, "No report available.")

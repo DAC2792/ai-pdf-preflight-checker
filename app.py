@@ -15,6 +15,8 @@ import markdown
 from werkzeug.utils import secure_filename
 import bleach
 import uuid
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 #runs all pathing from the required parent folder or 'root'
 BASE_DIR = Path(__file__).parent
@@ -47,6 +49,9 @@ app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 def file_too_large(e):
     abort(400, "File exceeds the 50 MB upload limit.")
 
+# rate limiter - prevents API quota exhaustion from repeated requests
+limiter = Limiter(get_remote_address, app = app, default_limits=["10 per minute"])
+
 #route to the HTML home page
 @app.route("/")
 def home():
@@ -54,6 +59,7 @@ def home():
 
 #create report and route the user to the results page. Security restrictions included to prevent malicous filenames from overwriting outside of intended parameters
 @app.route("/check", methods=["POST"])
+@limiter.limit("10 per minute")
 def check():
     file = request.files.get("pdf_file")
     if not file or file.filename == "":

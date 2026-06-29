@@ -24,3 +24,29 @@ def test_calculate_bleed_normal():
     result = calculate_bleed(trimbox, bleedbox)
     assert result["bleed_width_mm"] > 0
     assert result["bleed_height_mm"] > 0
+
+# --- Font Embedding Tests ---
+def test_check_font_embedding_embedded():
+    from unittest.mock import MagicMock
+    mock_page = MagicMock()
+    mock_page.Resources = {
+        "/Font": {
+            "/F1": {
+                "/BaseFont": "/Helvetica",
+                "/FontDescriptor": {"/FontFile2": MagicMock()},
+            }
+        }
+    }
+    result = check_font_embedding(mock_page)
+    assert result[0]["embedded"] is True
+
+def test_check_font_embedding_not_embedded():
+    from unittest.mock import MagicMock
+    mock_page = MagicMock()
+    mock_page.Resources = {
+        "/Font": {
+            "/F1": {"/BaseFont": "/Helvetica", "/FontDescriptor": {}}
+        }
+    }
+    result = check_font_embedding(mock_page)
+    assert result[0]["embedded"] is False

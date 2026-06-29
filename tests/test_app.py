@@ -2,6 +2,8 @@ import pytest
 import io
 import os
 from app import app
+from unittest.mock import patch
+from pathlib import Path
 
 @pytest.fixture
 def client():
@@ -9,6 +11,22 @@ def client():
     app.config["SECRET_KEY"] = "test-secret-key"
     with app.test_client() as client:
         yield client
+
+#--- Happy Path Test ---
+def test_check_success_path(client, tmp_path):
+    """Happy path — mocks all external calls and checks /check returns 200."""
+    fake_pdf = tmp_path / "test.pdf"
+    fake_pdf.write_bytes(b"%PDF-1.4 fake")
+
+    with patch("app.open_pdf", return_value=[]), \
+         patch("app.load_rules", return_value={}), \
+         patch("app.generate_report", return_value="## PressLens\nAll clear."), \
+         patch("app.save_report", return_value=Path("/tmp/report.txt")):
+
+        data = {"pdf_file": (fake_pdf.open("rb"), "test.pdf")}
+        response = client.post("/check", data=data, content_type="multipart/form-data")
+
+    assert response.status_code == 200
 
 # --- Route Tests ---
 def test_home_page(client):

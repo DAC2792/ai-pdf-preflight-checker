@@ -27,6 +27,7 @@ ALLOWED_TAGS = [
     ]
 
 ALLOWED_EXTENSIONS = {"pdf"}
+_report_store: dict[str, str] = {}
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -89,7 +90,9 @@ def check():
         report_path = save_report(report, filepath)
 
         report_html = bleach.clean(markdown.markdown(report), tags=ALLOWED_TAGS, strip=True)
-        session["report_path"] = str(report_path)
+        report_key = uuid.uuid4().hex
+        _report_store[report_key] = str(report_path)
+        session["report_key"] = report_key
         return render_template("results.html", report = report_html, overall_pass = overall_pass, filename = filename)
     finally:
         try:
@@ -100,7 +103,8 @@ def check():
 #download function for the generated report
 @app.route("/download")
 def download():
-    report_path = session.get("report_path")
+    report_key = session.get("report_key")
+    report_path = _report_store.get(report_key) if report_key else None
     if not report_path:
         abort(403, "No report available.")
     return send_file(report_path, as_attachment = True)

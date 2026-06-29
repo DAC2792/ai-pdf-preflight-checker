@@ -37,11 +37,19 @@ def check_bleed(bleed_data, page_number, rules):
     width = bleed_data["bleed_width_mm"]
     height = bleed_data["bleed_height_mm"]
     min_bleed = rules["bleed"]["min_bleed_mm"]
+    no_bleedbox = bleed_data.get("no_bleedbox", False)
     if width >= min_bleed and height >= min_bleed:
         result = "pass"
     else:
         result = "fail"
-    return {"check": "bleed", "page": page_number, "bleed_width_mm": width, "bleed_height_mm": height, "result": result}
+    return {
+        "check": "bleed",
+        "page": page_number,
+        "bleed_width_mm": width,
+        "bleed_height_mm": height,
+        "result": result,
+        "no_bleedbox": no_bleedbox
+    }
 
 #Calculate if the fonts present on each page are embedded or not
 def check_fonts(font_data, page_number, rules):

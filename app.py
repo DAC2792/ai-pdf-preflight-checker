@@ -38,6 +38,13 @@ if not secret_key:
     raise RuntimeError("FLASK_SECRET_KEY is not set. Add it to your .env file.")
 app.secret_key = secret_key
 
+#Limits upload size to 50MB to prevent memory exhustion / DoS attacks
+app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
+
+@app.errorhandler(413)
+def file_too_large(e):
+    abort(400, "File exceeds the 50 MB upload limit.")
+
 #route to the HTML home page
 @app.route("/")
 def home():

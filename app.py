@@ -64,7 +64,9 @@ def check():
     if not allowed_file(filename):
         abort(400, "Only PDF files are accepted.")
     unique_filename = f"{uuid.uuid4().hex}_{filename}"
-    filepath = BASE_DIR / "sample_pdfs" / unique_filename
+    upload_dir = BASE_DIR / "sample_pdfs"
+    upload_dir.mkdir(exist_ok = True)
+    filepath = upload_dir / unique_filename
     file.save(filepath)
 
     #try/finally runs the logic, and finally deletes the uploaded PDF from sample_pdfs/

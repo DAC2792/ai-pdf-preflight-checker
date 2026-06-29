@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 import markdown
 from werkzeug.utils import secure_filename
 import bleach
+import uuid
 
 #runs all pathing from the required parent folder or 'root'
 BASE_DIR = Path(__file__).parent
@@ -61,7 +62,8 @@ def check():
         abort(400, "Invalid filename.")
     if not allowed_file(filename):
         abort(400, "Only PDF files are accepted.")
-    filepath = BASE_DIR / "sample_pdfs" / filename
+    unique_filename = f"{uuid.uuid4().hex}_{filename}"
+    filepath = BASE_DIR / "sample_pdfs" / unique_filename
     file.save(filepath)
 
     #try/finally runs the logic, and finally deletes the uploaded PDF from sample_pdfs/

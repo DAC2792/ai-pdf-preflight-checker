@@ -9,13 +9,16 @@ pass/fail result for each one.
 from extraction import open_pdf
 from rules_engine import load_rules, check_resolution, check_colour_mode, check_bleed, check_fonts
 from report_generator import generate_report, save_report
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
 
 if __name__ == "__main__":
 
     #Acquire results from open_pdf, and rules from the yaml file
     filepath = input("Enter the filepath to your PDF: ")
     extraction_results = open_pdf(filepath)
-    rules = load_rules("config/preflight_rules.yaml")
+    rules = load_rules(BASE_DIR / "config" / "preflight_rules.yaml")
 
     #List created to store all results in
     pdf_results = []

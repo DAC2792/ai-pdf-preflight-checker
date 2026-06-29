@@ -16,6 +16,9 @@ from datetime import datetime
 #load the .env file details into the program (keeps them private and secure)
 load_dotenv()
 
+#assign the working model into the variable object "CLAUDE_MODEL"
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")
+
 #runs all pathing from the required parent folder or 'root'
 BASE_DIR = Path(__file__).parent.parent
 
@@ -29,7 +32,7 @@ client = anthropic.Anthropic(api_key = api_key)
 #generate a human-readable preflight report using the anthropic API
 def generate_report(pdf_results, filepath):
     message = client.messages.create(
-        model = "claude-sonnet-4-6",
+        model = CLAUDE_MODEL,
         max_tokens = 2048,
         messages = [
             {"role": "user", "content": f"""You are a professional print production specialist. You are acting for a software application named "PressLens" which is built to help support users in selecting print ready artwork.

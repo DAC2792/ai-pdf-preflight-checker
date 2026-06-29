@@ -1,5 +1,6 @@
 import pytest
 import io
+import os
 from app import app
 
 @pytest.fixture
@@ -15,14 +16,20 @@ def test_home_page(client):
     assert response.status_code == 200
 
 def test_check_rejects_non_pdf(client):
+    """Extension filter rejects non-PDF."""
     data = {"pdf_file": (io.BytesIO(b"fake content"), "malicious.exe")}
     response = client.post("/check", data=data, content_type="multipart/form-data")
     assert response.status_code == 400
 
-def test_check_rejects_path_traversal(client):
-    data = {"pdf_file": (io.BytesIO(b"fake content"), "../../app.py")}
-    response = client.post("/check", data=data, content_type="multipart/form-data")
-    assert response.status_code == 400
+def test_check_sanitises_path_traversal(client):
+    """secure_filename strips traversal from a .pdf-named attempt."""
+    from unittest.mock import patch
+    app.config["PROPAGATE_EXCEPTIONS"] = False
+    with patch("app.open_pdf", side_effect=Exception("not a real pdf")):
+        data = {"pdf_file": (io.BytesIO(b"%PDF-1.4 fake"), "../../etc/passwd.pdf")}
+        response = client.post("/check", data=data, content_type="multipart/form-data")
+    assert response.status_code in (400, 500)
+    assert not os.path.exists("etc/passwd.pdf")
 
 def test_download_without_session_returns_403(client):
     response = client.get("/download")

@@ -55,6 +55,8 @@ def check_bleed(bleed_data, page_number, rules):
 def check_fonts(font_data, page_number, rules):
     require_embedded = rules["fonts"]["require_embedded"]
 
+    # all ([]) == True - a page with no fonts is considered embedding-compliant
+    #(e.g. a pure image page has no fonts to embed)
     all_embedded = all(font["embedded"] for font in font_data)
 
     if not require_embedded or all_embedded:

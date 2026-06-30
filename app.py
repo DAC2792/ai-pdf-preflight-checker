@@ -115,6 +115,7 @@ def download():
     report_path = _report_store.get(report_key) if report_key else None
     if not report_path:
         abort(403, "No report available.")
+    _report_store.pop(report_key, None)
     return send_file(report_path, as_attachment = True)
 
 if __name__ == "__main__":

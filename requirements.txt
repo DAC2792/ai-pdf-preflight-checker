@@ -28,7 +28,6 @@ packaging==26.2
 pikepdf==10.9.1
 pillow==12.2.0
 pluggy==1.6.0
--e git+https://github.com/DAC2792/ai-pdf-preflight-checker.git@b01b93e1daec9a67d6ce231231746c99208b470c#egg=presslens
 pydantic==2.13.4
 pydantic_core==2.46.4
 Pygments==2.20.0

@@ -18,8 +18,10 @@ def test_check_success_path(client, tmp_path):
     fake_pdf = tmp_path / "test.pdf"
     fake_pdf.write_bytes(b"%PDF-1.4 fake")
 
-    with patch("app.open_pdf", return_value=[]), \
-         patch("app.load_rules", return_value={}), \
+    with patch("app.open_pdf", return_value=[
+            {"check_type": "image", "page": 1, "dpi": 350, "print_mode": "DeviceCMYK"}
+        ]), \
+         patch("app.load_rules", return_value={"resolution": {"min_dpi": 300}, "colour": {"required_mode": "CMYK"}}), \
          patch("app.generate_report", return_value="## PressLens\nAll clear."), \
          patch("app.save_report", return_value=Path("/tmp/report.txt")):
 

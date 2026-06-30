@@ -27,6 +27,9 @@ api_key = os.getenv("ANTHROPIC_API_KEY")
 if not api_key:
     raise RuntimeError("ANTHROPIC_API_KEY is not set. Add it to your .env file.")
 
+# Client instantiated at module level for simplicity in V1.
+# For V2 consider lazy initialisation or dependency injection
+# to avoid requiring the env var at import time during testing.
 client = anthropic.Anthropic(api_key = api_key)
 
 #generate a human-readable preflight report using the anthropic API

@@ -3,13 +3,13 @@ from extraction import calculate_dpi, calculate_bleed, check_font_embedding
 
 # --- DPI Tests ---
 def test_calculate_dpi_normal():
-    image_info = {"width": 2480, "bbox": (0, 0, 595, 842)}
+    image_info = {"width": 2480, "height": 3508, "bbox": (0, 0, 595, 842)}
     result = calculate_dpi(image_info)
     assert result > 0
 
 def test_calculate_dpi_zero_width():
     # zero-width bounding box should return 0, not crash
-    image_info = {"width": 2480, "bbox": (0, 0, 0, 842)}
+    image_info = {"width": 2480, "height": 3508, "bbox": (0, 0, 0, 842)}
     result = calculate_dpi(image_info)
     assert result == 0
 

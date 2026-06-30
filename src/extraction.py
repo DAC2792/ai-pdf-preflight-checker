@@ -40,14 +40,23 @@ def open_pdf(filepath):
 #Calculate the DPI of the supplied PDF page(s) images
 def calculate_dpi(image_info):
     pixel_width = image_info["width"]
+    pixel_height = image_info["height"]
     bbox = image_info["bbox"]
-    placed_width_points = bbox[2] - bbox[0]
 
-    if placed_width_points <= 0:
+    placed_width_points = bbox[2] - bbox[0]
+    placed_height_points = bbox[3] - bbox[1]
+
+    if placed_width_points <= 0 or placed_height_points <= 0:
         return 0
     
     placed_width_inches = placed_width_points / 72
-    return pixel_width / placed_width_inches
+    placed_height_inches = placed_height_points / 72
+
+    dpi_width = pixel_width / placed_width_inches
+    dpi_height = pixel_height / placed_height_inches
+
+    #return the lower of the two. worst case is what matters for print quality
+    return min(dpi_width, dpi_height)
         
 
 #Calculate the amount of bleed supplied using the trimbox/bleedboxes

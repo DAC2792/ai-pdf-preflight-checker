@@ -93,7 +93,7 @@ def check():
             elif item["check_type"] == "fonts":
                 pdf_results.append(check_fonts(item["font_data"], item["page"], rules))
 
-        overall_pass = all(item["result"] == "pass" for item in pdf_results)
+        overall_pass = bool(pdf_results) and all(item["result"] == "pass" for item in pdf_results)
         report = generate_report(pdf_results, filepath)
         report_path = save_report(report, filepath)
 

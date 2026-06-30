@@ -31,6 +31,7 @@ client = anthropic.Anthropic(api_key = api_key)
 
 #generate a human-readable preflight report using the anthropic API
 def generate_report(pdf_results, filepath):
+    pdf_name = Path(filepath).name
     message = client.messages.create(
         model = CLAUDE_MODEL,
         max_tokens = 2048,
@@ -44,7 +45,7 @@ def generate_report(pdf_results, filepath):
             - What failed and why it matters in simple terms
             - One clear action the customer needs to take to fix it
              
-            PDF file: {filepath}
+            PDF file: {pdf_name}
             Results: {pdf_results}"""}
         ]
     )
